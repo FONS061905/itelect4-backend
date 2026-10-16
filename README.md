@@ -37,6 +37,7 @@ The API runs on `http://localhost:4000`.
 | `PORT` | Port to listen on (default `4000`) |
 | `MONGODB_URI` | Atlas connection string, with the database name after `.net/` |
 | `JWT_SECRET` | Long random string used to sign tokens |
+| `CORS_ORIGIN` | Frontend address(es) allowed to call the API, comma-separated (default `http://localhost:5173`) |
 
 ## Endpoints
 

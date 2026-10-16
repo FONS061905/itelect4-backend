@@ -12,7 +12,14 @@ import { connectDB } from "./config/db";
 
 export const app = express();
 
-app.use(cors());
+// Only the frontend's own address may read these replies in a browser.
+// CORS_ORIGIN is the deployed frontend's URL (several can be given,
+// separated by commas); without it, the local Vite dev server is allowed.
+const allowedOrigins = (process.env.CORS_ORIGIN ?? "http://localhost:5173")
+  .split(",")
+  .map((origin) => origin.trim());
+
+app.use(cors({ origin: allowedOrigins }));
 app.use(express.json());
 
 // ===== SESSION 10: the line that makes this work on Vercel ===========
