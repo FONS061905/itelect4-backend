@@ -31,6 +31,17 @@ app.use(async (_req: Request, _res: Response, next: NextFunction) => {
   next();
 });
 
+// Opening the bare address in a browser shows what this API is instead
+// of the 404 message.
+app.get("/", (_req: Request, res: Response) => {
+  res.json({
+    name: "itelect4-backend",
+    description: "Lost & Found Tracker API",
+    health: "/api/health",
+    endpoints: ["/api/auth", "/api/locations", "/api/items"],
+  });
+});
+
 app.get("/api/health", (_req: Request, res: Response) => {
   res.json({ ok: true, db: mongoose.connection.readyState === 1 });
 });
