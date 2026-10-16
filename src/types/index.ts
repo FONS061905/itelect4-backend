@@ -33,6 +33,15 @@ export interface Item {
   createdAt: string;
 }
 
+// The places on campus where an item can be lost or found. Like a course
+// in the class demo, the code is its identity, so it has no id.
+export interface Location {
+  code: string;
+  name: string;
+  building: string;
+  floor: number;
+}
+
 export enum ClaimStatus {
   Pending = "pending",
   Approved = "approved",
@@ -71,6 +80,15 @@ export type ItemDoc = Omit<Item, "id" | "reporterId" | "createdAt"> & {
   createdAt: Date;
   updatedAt: Date;
 };
+
+// Location has no id to rename and nothing to leave out, but it still
+// has to be a Pick: Omit and Pick produce a MAPPED type, which the
+// toJSON transform's Record<string, unknown> accepts and an interface
+// does not.
+export type LocationDoc = Pick<
+  Location,
+  "code" | "name" | "building" | "floor"
+>;
 
 // What a client sends to create an item. No id and no reporterId --
 // the server reads the reporter off the token instead.

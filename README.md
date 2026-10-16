@@ -14,6 +14,7 @@ The frontend lives in a separate repo (`itelect4-project`) and is deployed separ
 ```bash
 npm install
 cp .env.example .env   # then fill in MONGODB_URI and JWT_SECRET
+npm run seed           # once, to add the campus locations
 npm run dev
 ```
 
@@ -26,6 +27,7 @@ The API runs on `http://localhost:4000`.
 | `npm run dev` | Runs `src/server.ts` with `tsx`, restarts on save (no type-check) |
 | `npm run build` | Type-checks and compiles `src/` into `dist/` |
 | `npm start` | Runs the compiled `dist/server.js` (run `build` first) |
+| `npm run seed` | Puts the campus locations into the database (safe to run again) |
 | `npm run typecheck` | Type-checks without writing `dist/` |
 
 ## Environment variables
@@ -35,6 +37,7 @@ The API runs on `http://localhost:4000`.
 | `PORT` | Port to listen on (default `4000`) |
 | `MONGODB_URI` | Atlas connection string, with the database name after `.net/` |
 | `JWT_SECRET` | Long random string used to sign tokens |
+| `CORS_ORIGIN` | Frontend address(es) allowed to call the API, comma-separated (default `http://localhost:5173`) |
 
 ## Endpoints
 
@@ -43,6 +46,8 @@ The API runs on `http://localhost:4000`.
 | GET | `/api/health` | – | Server and database status |
 | POST | `/api/auth/register` | – | Create an account (`name`, `email`, `password`) |
 | POST | `/api/auth/login` | – | Returns `{ token, user }` |
+| GET | `/api/locations` | – | All campus locations |
+| GET | `/api/locations/:code` | – | One location by code |
 | GET | `/api/items` | Bearer | Items you reported, newest first |
 | GET | `/api/items/:id` | Bearer | One of your items |
 | POST | `/api/items` | Bearer | Report an item (`title`, `type`, `location`, `description?`) |
@@ -63,7 +68,11 @@ src/
   middleware/auth.ts requireAuth (Bearer token check)
   models/User.ts     user schema, password hashing
   models/Item.ts     lost/found item schema
+  models/Location.ts campus location schema
   routes/auth.ts     register / login
   routes/items.ts    item CRUD
+  routes/locations.ts public location list
+  data/locations.ts  the locations npm run seed writes
+  seed.ts            seed script
   types/index.ts     shared types
 ```
