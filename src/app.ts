@@ -7,17 +7,29 @@ import cors from "cors";
 import mongoose from "mongoose";
 import { authRouter } from "./routes/auth";
 import { itemRouter } from "./routes/items";
+import { locationRouter } from "./routes/locations";
+import { connectDB } from "./config/db";
 
 export const app = express();
 
 app.use(cors());
 app.use(express.json());
 
+// ===== SESSION 10: the line that makes this work on Vercel ===========
+// On your laptop, server.ts connects before any request arrives. On
+// Vercel there is no startup step -- a request is the first thing that
+// happens -- so every request waits here for the connection first.
+app.use(async (_req: Request, _res: Response, next: NextFunction) => {
+  await connectDB();
+  next();
+});
+
 app.get("/api/health", (_req: Request, res: Response) => {
   res.json({ ok: true, db: mongoose.connection.readyState === 1 });
 });
 
 app.use("/api/auth", authRouter);
+app.use("/api/locations", locationRouter);
 app.use("/api/items", itemRouter);
 
 // 404 Handler
@@ -49,3 +61,8 @@ app.use(
     res.status(500).json({ message: "Something went wrong" });
   },
 );
+
+// Vercel looks for an Express app in a few known places, and src/app.ts
+// is one of them. A default export is all it needs, which is why this
+// repo has no vercel.json.
+export default app;
