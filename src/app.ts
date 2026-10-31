@@ -8,6 +8,7 @@ import mongoose from "mongoose";
 import { authRouter } from "./routes/auth";
 import { itemRouter } from "./routes/items";
 import { locationRouter } from "./routes/locations";
+import { aiRouter } from "./routes/ai";
 import { connectDB } from "./config/db";
 
 export const app = express();
@@ -49,6 +50,8 @@ app.get("/api/health", (_req: Request, res: Response) => {
 app.use("/api/auth", authRouter);
 app.use("/api/locations", locationRouter);
 app.use("/api/items", itemRouter);
+// GT5: private and rate limited; the only route that talks to Gemini.
+app.use("/api/ai", aiRouter);
 
 // 404 Handler
 app.use((req: Request, res: Response) => {
