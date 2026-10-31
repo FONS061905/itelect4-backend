@@ -1,5 +1,7 @@
 # itelect4-backend
 
+[![CI](https://github.com/FONS061905/itelect4-backend/actions/workflows/ci.yml/badge.svg)](https://github.com/FONS061905/itelect4-backend/actions/workflows/ci.yml)
+
 Express + TypeScript + MongoDB API for the Lost & Found Tracker (ITELECT4).
 The frontend lives in a separate repo (`itelect4-project`) and is deployed separately.
 
